@@ -48,65 +48,94 @@
 		-->
 
 		<h2>Overview</h2>
-		Give a high-level overview of what you implemented in this homework. Think about what you've built as a whole. Share your thoughts on what interesting things you've learned from completing the homework.
+		This is a project where we render svgs or svg like objects, borrowing the language of svgs to render defined shapes in locations we want. 	
 
+		This project corrected a misconception I had that screen computation was "free", I thought that it was something computers just did well naturally. 
 		<h2>Task 1: Drawing Single-Color Triangles</h2>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+		I rasterized triangles by defining a bounding box, and then iterating through the box. I used the line by line optimization where instead of recalculating the function to see if it's inside the triangle, i reuse old data by moving a tiny offset. This is more optimal than a simple bounding box test because it doesn't recalculate every pixel.
 
-		<p>Here is an example 2x2 gridlike structure using an HTML table. Each <b>tr</b> is a row and each <b>td</b> is a column in that row. You might find this useful for framing and showing your result images in an organized fashion.</p>
+		<figure>
+			<img src="assets/ss_1.png" alt="Task 1" style="width:50%"/>
+			<figcaption>Where sampling at the middle fails</figcaption>
+		</figure>
+
+		<h2>Task 2: Antialiasing by Supersampling</h2>
+		I implemented supersampling by expanding the buffer and, as an abstraction scaled up the width and height of the image. I made some changes to some helper functions, but my primary ones were rasterize_point to correctly rasterize lines, rasterize_triangle, where i just acted like the size of the image increased, and resolve_to_frame_buffer, where the data gets translated into the final buffer frame. Supersampling is useful because sampling the middle of the pixel doesn't give accurate information 100% of the time and could cause rough textures. As for the rasterization process, i accumulate from the neighboring pixels and write to frame buffer. 
+
+		<p>My 2x2 grid</p>
 		<div style="display: flex; flex-direction: column; align-items: center;">
 			<table style="width: 100%; text-align: center; border-collapse: collapse;">
 			  <tr>
 				<td style="text-align: center;">
-				  <img src="assets/lion.jpg" width="400px"/>
-				  <figcaption>Caption goes here.</figcaption>
+				  <img src="assets/ss_2.png" width="400px"/>
+				  <figcaption>1x </figcaption>
 				</td>
 				<td style="text-align: center;">
-				  <img src="assets/lion.jpg" width="400px"/>
-				  <figcaption>Caption goes here.</figcaption>
+				  <img src="assets/ss_3.png" width="400px"/>
+				  <figcaption>4x</figcaption>
 				</td>
 			  </tr>
 			  <tr>
 				<td style="text-align: center;">
-				  <img src="assets/lion.jpg" width="400px"/>
-				  <figcaption>Caption goes here.</figcaption>
+				  <img src="assets/ss_4.png" width="400px"/>
+				  <figcaption>9x</figcaption>
 				</td>
 				<td style="text-align: center;">
-				  <img src="assets/lion.jpg" width="400px"/>
-				  <figcaption>Caption goes here.</figcaption>
+				  <img src="assets/ss_5.png" width="400px"/>
+				  <figcaption>16x</figcaption>
 				</td>
 			  </tr>
 			</table>
 		</div>
-		
-		<h2>Task 2: Antialiasing by Supersampling</h2>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-
+		Supersampling helped with the aliasing by softening the edges with a transitional color. 
 		<h2>Task 3: Transforms</h2>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-
+		<figure>
+			<img src="assets/ss_11.png" alt="Task 1" style="width:50%"/>
+			<figcaption>the robot embraces it's death</figcaption>
+		</figure>
+		well, I was trying to rotate the arms so the robot says hi, but because the arms are defined in a way that doesn't mesh well with rotating i chose to just make the whole body rotate, and that was the outcome of this work. It looks pretty cool though, like it's looking at the sky and there's a UFO or a missile there. 
 		<h2>Task 4: Barycentric coordinates</h2>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-
+		Barycentric coordinates are a way to describe the location a point is in relative to other points.  
+		<figure>
+			<img src="assets/ss_12.png" alt="Task 1" style="width:50%"/>
+			<figcaption>three colored triangle</figcaption>
+		</figure>
+		<figure>
+			<img src="assets/ss_6.png" alt="Task 1" style="width:50%"/>
+			<figcaption>the wheel</figcaption>
+		</figure>
 		<h2>Task 5: "Pixel sampling" for texture mapping</h2>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+		Pixel sampling is getting the pixel at coordinate uv given the texture, which is required because textures do not map neatly to coordinate points. I implemented this by reusing my previous Barycentric code for both u and v. Biliniear is getting the 4 nearest pixels and lerping them, Nearest is getting the nearest pixel. 
 
+				<p>My 2x2 grid</p>
+		<div style="display: flex; flex-direction: column; align-items: center;">
+			<table style="width: 100%; text-align: center; border-collapse: collapse;">
+			  <tr>
+				<td style="text-align: center;">
+				  <img src="assets/ss_7.png" width="400px"/>
+				  <figcaption>nearest, 1x </figcaption>
+				</td>
+				<td style="text-align: center;">
+				  <img src="assets/ss_8.png" width="400px"/>
+				  <figcaption>nearest, 16x</figcaption>
+				</td>
+			  </tr>
+			  <tr>
+				<td style="text-align: center;">
+				  <img src="assets/ss_9.png" width="400px"/>
+				  <figcaption>bilinear, 1x</figcaption>
+				</td>
+				<td style="text-align: center;">
+				  <img src="assets/ss_10.png" width="400px"/>
+				  <figcaption>bilinear, 16x</figcaption>
+				</td>
+			  </tr>
+			</table>
+		</div>
+		From my untrained eye, nearest seems to capture less information, for example even in the 16x image the width of the beam is not captured well, and in 1x the image has some obvious artifacts(the zig zag pattern). however, from the big picture a lot of these details aren't noticable. 
 		<h2>Task 6: "Level Sampling" with mipmaps for texture mapping</h2>
 		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
 
-		<h2>(Optional) Task 7: Extra Credit - Draw Something Creative!</h2>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-
-		<h2>Additional Notes (please remove)</h2>
-		<ul>
-			<li>You can also add code if you'd like as so: <code>code code code</code></li>
-			<li>If you'd like to add math equations, 
-				<ul>
-					<li>You can write inline equations like so: \( a^2 + b^2 = c^2 \)</li>
-					<li>You can write display equations like so: \[ a^2 + b^2 = c^2 \]</li>
-				</ul>
-			</li>
-		</ul>
 		</div>
 	</body>
 </html>
