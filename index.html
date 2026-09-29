@@ -32,11 +32,11 @@
 
 		<br>
 
-		Link to webpage: (TODO) <a href="https://cs184.eecs.berkeley.edu/fa26">cs184.eecs.berkeley.edu/fa26</a>
+		Link to webpage: <a href="https://cal-cs184-student.github.io/hw1-myself-writeup/">https://cal-cs184-student.github.io/hw1-myself-writeup/</a>
 		
 		<br>
 
-		Link to GitHub repository: (TODO) <a href="https://cs184.eecs.berkeley.edu/fa26">cs184.eecs.berkeley.edu/fa26</a>
+		Link to GitHub repository: <a href="https://github.com/cal-cs184-student/hw1-myself">https://github.com/cal-cs184-student/hw1-myself</a>
 
 		<figure>
 			<img src="assets/lion.jpg" alt="Lion" style="width:50%"/>
@@ -134,8 +134,33 @@
 		</div>
 		From my untrained eye, nearest seems to capture less information, for example even in the 16x image the width of the beam is not captured well, and in 1x the image has some obvious artifacts(the zig zag pattern). however, from the big picture a lot of these details aren't noticable. 
 		<h2>Task 6: "Level Sampling" with mipmaps for texture mapping</h2>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-
+		Level sampling is the idea that some textures are more important than others. For example, in video games where some textures are just far away. I implemented it by using a switch statement, then calculating du/dx dv/dx du/dy dv/dy and using the formula.
+		<p>My 2x2 grid</p>
+		<div style="display: flex; flex-direction: column; align-items: center;">
+			<table style="width: 100%; text-align: center; border-collapse: collapse;">
+			  <tr>
+				<td style="text-align: center;">
+				  <img src="assets/ss_13.png" width="400px"/>
+				  <figcaption>zero, nearest</figcaption>
+				</td>
+				<td style="text-align: center;">
+				  <img src="assets/ss_14.png" width="400px"/>
+				  <figcaption>zero, linear interp</figcaption>
+				</td>
+			  </tr>
+			  <tr>
+				<td style="text-align: center;">
+				  <img src="assets/ss_15png" width="400px"/>
+				  <figcaption>nearest, nearest</figcaption>
+				</td>
+				<td style="text-align: center;">
+				  <img src="assets/ss_16.png" width="400px"/>
+				  <figcaption>nearest, bilinear</figcaption>
+				</td>
+			  </tr>
+			</table>
+			Im focusing on the white part, 
+		</div>
 		</div>
 	</body>
 </html>
