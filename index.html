@@ -50,15 +50,43 @@
 		<h2>Overview</h2>
 		This is a project where we render svgs or svg like objects, borrowing the language of svgs to render defined shapes in locations we want. 	
 
-		This project corrected a misconception I had that screen computation was "free", I thought that it was something computers just did well naturally. 
+		This project corrected a misconception I had that screen computation was "free", I thought that it was something computers just did well naturally. It also taught me to trust the philosophy of putting absolute trust in your mathematic functions. 
 		<h2>Task 1: Drawing Single-Color Triangles</h2>
-		I rasterized triangles by defining a bounding box, and then iterating through the box. I used the line by line optimization where instead of recalculating the function to see if it's inside the triangle, i reuse old data by moving a tiny offset. This is more optimal than a simple bounding box test because it doesn't recalculate every pixel.
+		I rasterized triangles by defining a bounding box, and then iterating through the box. First, I correct the winding order, next I used the line by line optimization where instead of recalculating the function to see if it's inside the triangle, i reuse old data by moving a tiny offset. Finally, during the bounding box I use a y line to see where the line intersects and store those variables so the box doesn't need to run tests on mostly white space. 
 
 		<figure>
 			<img src="assets/ss_1.png" alt="Task 1" style="width:50%"/>
 			<figcaption>Where sampling at the middle fails</figcaption>
 		</figure>
 
+		<h2>Task 1: EC</h2>
+		<br>
+		Major Optimizations:
+		<br>
+		I used the line by line optimization where instead of recalculating the function to see if it's inside the triangle, i reuse old data by moving a tiny offset. I also used the slope of the line to find start and end points instead of evaluating the triangles with huge bounding boxes. This halved my execution time, as expected.
+		<br>Minor Optimizations:<br>
+		I used floats even though they were inaccurate someties, i minimized recomputation of the row coordinates(probably already handled by the compiler, did nothing)
+		<br>
+		<br>Here are the times for basic bounding box<br>
+		<br>svg.draw(): 4.52187 ms
+		<br>svg.draw(): 4.48513 ms
+		<br>svg.draw(): 4.48746 ms
+		<br>svg.draw(): 4.48204 ms
+		<br>svg.draw(): 4.46208 ms
+		<br>svg.draw(): 4.52325 ms
+		<br>svg.draw(): 4.46633 ms
+		<br>svg.draw(): 4.45746 ms
+		<br>svg.draw(): 4.48917 ms<br>
+		<br>Here are the times for optimized line calculations<br>
+		<br>svg.draw(): 1.83475 ms
+		<br>svg.draw(): 1.76463 ms
+		<br>svg.draw(): 1.77954 ms
+		<br>svg.draw(): 1.79533 ms
+		<br>svg.draw(): 1.76937 ms
+		<br>svg.draw(): 1.77687 ms
+		<br>svg.draw(): 1.74896 ms
+		<br>svg.draw(): 1.79021 ms
+		<br>svg.draw(): 1.75167 ms<br>
 		<h2>Task 2: Antialiasing by Supersampling</h2>
 		I implemented supersampling by expanding the buffer and, as an abstraction scaled up the width and height of the image. I made some changes to some helper functions, but my primary ones were rasterize_point to correctly rasterize lines, rasterize_triangle, where i just acted like the size of the image increased, and resolve_to_frame_buffer, where the data gets translated into the final buffer frame. Supersampling is useful because sampling the middle of the pixel doesn't give accurate information 100% of the time and could cause rough textures. As for the rasterization process, i accumulate from the neighboring pixels and write to frame buffer. 
 
@@ -134,32 +162,40 @@
 		</div>
 		From my untrained eye, nearest seems to capture less information, for example even in the 16x image the width of the beam is not captured well, and in 1x the image has some obvious artifacts(the zig zag pattern). however, from the big picture a lot of these details aren't noticable. 
 		<h2>Task 6: "Level Sampling" with mipmaps for texture mapping</h2>
-		Level sampling is the idea that some textures are more important than others. For example, in video games where some textures are just far away. I implemented it by using a switch statement, then calculating du/dx dv/dx du/dy dv/dy and using the formula.
+		Level sampling is the idea that some textures are more important than others. For example, in video games where some textures are just far away. I implemented it by using a switch statement, then calculating du/dx dv/dx du/dy dv/dy and using the formula from class. I calculated the derivatives by getting the locations of the textures one down and one right. Then, in get level i used the slope and found the pythagorean theorem. 
+
+		<br>
+		<br>
+		Zero level is the computationally cheapest, using no additional memory or overhead. However, it provides bad antialiasing because compressed textures are not sampled well. <br>
+		Nearest sampling is using the distance to the next pixel to calculate a level. This causes more computation to happen, and more storage too. It provides good results, but because it's a strict integer some places will still have aliasing artifacts.<br>
+		Level sampling is using the distance to the next pixel to calculate a level.In addition to that, it uses the next map to blend the two pixels together, causing less aliasing. This is good, but it's more computationally expensive, requiring more to lookup both levels.<br>
+
+
 		<p>My 2x2 grid</p>
 		<div style="display: flex; flex-direction: column; align-items: center;">
 			<table style="width: 100%; text-align: center; border-collapse: collapse;">
 			  <tr>
 				<td style="text-align: center;">
-				  <img src="assets/ss_13.png" width="400px"/>
+				  <img src="assets/ss_17.png" width="400px"/>
 				  <figcaption>zero, nearest</figcaption>
 				</td>
 				<td style="text-align: center;">
-				  <img src="assets/ss_14.png" width="400px"/>
-				  <figcaption>zero, linear interp</figcaption>
+				  <img src="assets/ss_18.png" width="400px"/>
+				  <figcaption>zero, bilinear</figcaption>
 				</td>
 			  </tr>
 			  <tr>
 				<td style="text-align: center;">
-				  <img src="assets/ss_15.png" width="400px"/>
+				  <img src="assets/ss_19.png" width="400px"/>
 				  <figcaption>nearest, nearest</figcaption>
 				</td>
 				<td style="text-align: center;">
-				  <img src="assets/ss_16.png" width="400px"/>
+				  <img src="assets/ss_20.png" width="400px"/>
 				  <figcaption>nearest, bilinear</figcaption>
 				</td>
 			  </tr>
 			</table>
-			Im focusing on the white part, 
+			In the first one, the zero level seems to capture the snow a lot, which distracts from the image. Bilinear fixes it, but not by much. In the nearest, snow is completely ignored, which makes the image flow smoother, however there's a weird pattern in the sky that makes it look clunky, which is fixed with bilinear interpolation.  
 		</div>
 		</div>
 	</body>
